@@ -21,7 +21,8 @@ const User = mongoose.model("User", {
 const Poll = mongoose.model("Poll", {
   question: String,
   options: [{ text: String, votes: Number }],
-  createdBy: String
+  createdBy: String,
+  userId: String   // ✅ ADD THIS
 });
 
 const SECRET = "secret123";
@@ -55,15 +56,14 @@ app.post("/create-poll", async (req, res) => {
   try {
     const token = req.headers.authorization;
 
-    //console.log("TOKEN RECEIVED:", token); // ✅ ADD HERE
-
     const decoded = jwt.verify(token, "secret123");
     const user = await User.findById(decoded.id);
 
     const poll = await Poll.create({
       question,
       options: options.map(o => ({ text: o, votes: 0 })),
-      createdBy: user.username
+      createdBy: user.username,
+      userId: user._id   // ✅ SAVE USER ID
     });
 s
     res.json(poll);
@@ -110,8 +110,28 @@ app.get("/profile", async (req, res) => {
 
 // DELETE POLL
 app.delete("/delete-poll/:id", async (req, res) => {
-  await Poll.findByIdAndDelete(req.params.id);
-  res.json({ message: "Poll deleted" });
+  try {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, "secret123");
+
+    const poll = await Poll.findById(req.params.id);
+
+    if (!poll) {
+      return res.status(404).json({ message: "Poll not found" });
+    }
+
+    // ✅ CHECK OWNER
+    if (poll.userId != decoded.id) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
+    await Poll.findByIdAndDelete(req.params.id);
+
+    res.json({ message: "Poll deleted" });
+
+  } catch (err) {
+    res.status(401).json({ message: "Unauthorized" });
+  }
 });
 
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
