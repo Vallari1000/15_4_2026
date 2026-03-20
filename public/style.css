@@ -1,0 +1,63 @@
+body {
+  font-family: Arial;
+  background: linear-gradient(#cfe8d5, #9ec5a9);
+}
+
+.center {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.card {
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+  width:300px;
+}
+
+button {
+  background:#4b8f6b;
+  color:white;
+  border:none;
+  padding:10px;
+  margin:5px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button.delete {
+  background:#e74c3c;
+}
+
+input {
+  display:block;
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+}
+
+.title {
+  text-align:center;
+  margin-top:20px;
+}
+
+.grid {
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-top:30px;
+}
+
+.box {
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+}
+
+.poll {
+  margin-bottom:15px;
+}

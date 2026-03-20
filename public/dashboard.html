@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1 class="title">CampusConnect Dashboard</h1>
+
+<div class="grid">
+
+  <div class="box">
+    <h3>Create Poll</h3>
+
+    <input id="question" placeholder="Question">
+    <input id="opt1" placeholder="Option 1">
+    <input id="opt2" placeholder="Option 2">
+
+    <button onclick="createPoll()">Create</button>
+  </div>
+
+  <div class="box">
+    <h3>Polls</h3>
+    <div id="polls"></div>
+  </div>
+
+</div>
+
+<script>
+const pollsDiv = document.getElementById("polls");
+
+// CREATE
+async function createPoll(){
+  await fetch("/create-poll",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      question:question.value,
+      options:[opt1.value,opt2.value]
+    })
+  });
+
+  question.value="";
+  opt1.value="";
+  opt2.value="";
+
+  loadPolls();
+}
+
+// LOAD
+async function loadPolls(){
+  const res = await fetch("/polls");
+  const polls = await res.json();
+
+  pollsDiv.innerHTML="";
+
+  polls.forEach(p=>{
+    let html = `<div class="poll"><h4>${p.question}</h4>`;
+
+    p.options.forEach((o,i)=>{
+      html += `
+        <button onclick="vote('${p._id}',${i})">
+          ${o.text} (${o.votes})
+        </button>
+      `;
+    });
+
+    // ✅ DELETE BUTTON (IMPORTANT)
+    html += `
+      <br>
+      <button onclick="deletePoll('${p._id}')" class="delete">
+        Delete Poll
+      </button>
+    `;
+
+    html += `</div><hr/>`;
+
+    pollsDiv.innerHTML += html;
+  });
+}
+
+// VOTE
+async function vote(id,index){
+  await fetch("/vote",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      pollId:id,
+      optionIndex:index
+    })
+  });
+
+  loadPolls();
+}
+
+// DELETE (FULLY DEBUGGED)
+async function deletePoll(id){
+  console.log("Deleting:", id);
+
+  const confirmDelete = confirm("Delete this poll?");
+  if(!confirmDelete) return;
+
+  const res = await fetch(`/delete-poll/${id}`,{
+    method:"DELETE"
+  });
+
+  const data = await res.json();
+  console.log(data);
+
+  alert(data.message);
+
+  loadPolls();
+}
+
+loadPolls();
+</script>
+
+</body>
+</html>
