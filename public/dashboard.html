@@ -2,6 +2,9 @@
 <html>
 <head>
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -11,38 +14,59 @@
 
 <div class="grid">
 
+  <!-- CREATE POLL -->
   <div class="box">
     <h3>Create Poll</h3>
 
     <input id="question" placeholder="Question">
+
     <div id="optionsBox">
-       <input class="option" placeholder="Option 1">
-       <input class="option" placeholder="Option 2">
+      <input class="option" placeholder="Option 1">
+      <input class="option" placeholder="Option 2">
     </div>
 
     <button onclick="addOption()">+ Add Option</button>
-
     <button onclick="createPoll()">Create</button>
-    </div>
+  </div>
 
-    <div class="box">
-      <h3>Polls</h3>
+  <!-- LOCATION -->
+  <div class="box">
+    <button onclick="getLocation()">Share Location Once</button>
+    <button onclick="startLiveTracking()">Start Live Tracking</button>
+    <button onclick="stopLiveTracking()">Stop Tracking</button>
+  </div>
+
+  <!-- POLLS -->
+  <div class="box">
+    <h3>Polls</h3>
     <div id="polls"></div>
-    </div>
+  </div>
 
-    </div>
-    
+</div>
+
+<!-- MAP -->
+<div id="map" style="height:300px; margin:20px;"></div>
+
 <script>
 const pollsDiv = document.getElementById("polls");
 
-// ✅ ADD OPTION FUNCTION (MOVED INSIDE SCRIPT)
+// ICONS
+const userIcon = L.icon({
+  iconUrl: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+  iconSize: [32, 32]
+});
+
+const friendIcon = L.icon({
+  iconUrl: "https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+  iconSize: [32, 32]
+});
+
+// ADD OPTION
 function addOption(){
   const box = document.getElementById("optionsBox");
-
   const input = document.createElement("input");
   input.className = "option";
   input.placeholder = "New Option";
-
   box.appendChild(input);
 }
 
@@ -67,7 +91,7 @@ async function createPoll(){
     },
     body: JSON.stringify({
       question: question.value,
-      options: options   // ✅ dynamic options
+      options: options
     })
   });
 
@@ -84,6 +108,7 @@ async function createPoll(){
 async function loadPolls(){
   const res = await fetch("/polls");
   const polls = await res.json();
+
   const token = localStorage.getItem("token");
   const decoded = JSON.parse(atob(token.split('.')[1]));
   const currentUserId = decoded.id;
@@ -106,15 +131,15 @@ async function loadPolls(){
     });
 
     if (p.userId === currentUserId) {
-  html += `
-    <br>
-    <button class="delete" onclick="deletePoll('${p._id}')">
-      Delete Poll
-    </button>
-  `;
-}
-    html += `</div><hr/>`;
+      html += `
+        <br>
+        <button class="delete" onclick="deletePoll('${p._id}')">
+          Delete Poll
+        </button>
+      `;
+    }
 
+    html += `</div><hr/>`;
     pollsDiv.innerHTML += html;
   });
 }
@@ -137,14 +162,11 @@ async function vote(id,index){
 async function deletePoll(id){
   const token = localStorage.getItem("token");
 
-  const confirmDelete = confirm("Delete this poll?");
-  if(!confirmDelete) return;
+  if(!confirm("Delete this poll?")) return;
 
   const res = await fetch(`/delete-poll/${id}`,{
     method:"DELETE",
-    headers:{
-      "Authorization": token   // ✅ ADD THIS
-    }
+    headers:{ "Authorization": token }
   });
 
   const data = await res.json();
@@ -153,8 +175,7 @@ async function deletePoll(id){
   loadPolls();
 }
 
-
-// LOAD PROFILE
+// PROFILE
 async function loadProfile(){
   const token = localStorage.getItem("token");
 
@@ -168,9 +189,120 @@ async function loadProfile(){
     "Welcome, " + data.username;
 }
 
+// LOCATION SEND
+async function sendLocation(lat, lon){
+  const token = localStorage.getItem("token");
+
+  await fetch("/location", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization": token
+    },
+    body: JSON.stringify({ lat, lon })
+  });
+}
+
+// SHARE ONCE
+function getLocation(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      sendLocation(pos.coords.latitude, pos.coords.longitude);
+      alert("Location shared once ✅");
+    });
+  }
+}
+
+// LIVE TRACKING + PATH
+let watchId;
+let path = [];
+let polyline;
+
+function startLiveTracking(){
+  if(navigator.geolocation){
+    watchId = navigator.geolocation.watchPosition((pos)=>{
+
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+
+      updateMap(lat, lon);
+
+      path.push([lat, lon]);
+
+      if(!polyline){
+        polyline = L.polyline(path, {color:'blue'}).addTo(map);
+      } else {
+        polyline.setLatLngs(path);
+      }
+
+      sendLocation(lat, lon);
+    });
+
+    alert("Live tracking started 🚀");
+  }
+}
+
+// STOP
+function stopLiveTracking(){
+  if(watchId){
+    navigator.geolocation.clearWatch(watchId);
+    alert("Tracking stopped ❌");
+  }
+}
+
+// MAP
+let map;
+let marker;
+
+function initMap(lat=28.61, lon=77.23){
+  map = L.map('map').setView([lat, lon], 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+  marker = L.marker([lat, lon], {icon:userIcon}).addTo(map);
+}
+
+function updateMap(lat, lon){
+  marker.setLatLng([lat, lon]);
+  map.setView([lat, lon]);
+}
+
+// FRIENDS
+let markers = [];
+
+async function loadFriends(){
+  const res = await fetch("/all-locations");
+  const users = await res.json();
+
+  const token = localStorage.getItem("token");
+  const decoded = JSON.parse(atob(token.split('.')[1]));
+  const currentUserId = decoded.id;
+
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+
+  users.forEach(user => {
+    if(user._id === currentUserId) return;
+
+    if(user.lat && user.lon){
+      const m = L.marker([user.lat, user.lon], {icon:friendIcon})
+        .addTo(map)
+        .bindPopup(user.username);
+
+      markers.push(m);
+    }
+  });
+}
+
+// AUTO REFRESH
+setInterval(loadFriends, 5000);
+
 // INIT
+initMap();
 loadPolls();
 loadProfile();
+loadFriends();
+
 </script>
 
 </body>

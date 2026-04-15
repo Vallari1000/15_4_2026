@@ -1,17 +1,456 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Musafir</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaathRide - Campus Travel Made Easy</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Additional inline styles for database functionality */
+        .ride-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .ride-initial {
+            width: 50px;
+            height: 50px;
+            background: #4361ee;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .ride-details {
+            flex: 1;
+            margin-left: 15px;
+        }
+        .ride-details h3 {
+            margin: 0 0 5px 0;
+        }
+        .ride-route {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .ride-time, .ride-seats {
+            margin: 3px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .join-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .add-ride-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .add-ride-btn {
+            background: #06d6a0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .ride-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        .save-ride-btn {
+            background: #4361ee;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .rides-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-<body class="center">
+<body>
 
-<div class="card">
-  <h1>CampusConnect 🎓</h1>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">🚗 SaathRide</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#rides">Rides</a>
+            <a href="#quickmatch">Quick Match</a>
+            <a href="#buses">Buses</a>
+            <a href="#drivers">Drivers</a>
+            <a href="#" class="btn-primary">Join with College Email</a>
+        </div>
+    </nav>
 
-  <button onclick="location.href='register.html'">New User</button>
-  <button onclick="location.href='login.html'">Already Registered</button>
-</div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>The smart mobility network for campus</h1>
+        <p>Travel Smarter. Together.</p>
+        <div class="hero-buttons">
+            <a href="#" class="hero-btn hero-btn-primary">Join with College Email</a>
+            <a href="#" class="hero-btn hero-btn-secondary">How it works</a>
+        </div>
+    </section>
 
+    <!-- Problem Section -->
+    <section class="section">
+        <div class="grid-2col">
+            <div class="card">
+                <h3>❌ Campus travel is broken.</h3>
+                <ul>
+                    <li><strong>Unpredictable Auto Fares</strong><br>Every trip to the station is a negotiation battle.</li>
+                    <li><strong>Missed Connections</strong><br>Friends are leaving at the same time, but in different cabins.</li>
+                    <li><strong>Scattered Information</strong><br>Bus schedules on WhatsApp groups, hangout spots on word-of-mouth.</li>
+                </ul>
+            </div>
+            <div class="card solution-card">
+                <h3>✅ One verified ecosystem.</h3>
+                <ul>
+                    <li><strong>Fixed Fare Charts</strong><br>Verified drivers with agreed-upon rates. No more haggling.</li>
+                    <li><strong>Smart Ride Matching</strong><br>Find students leaving in the next 15 mins to the same place.</li>
+                    <li><strong>Campus Hub</strong><br>Everything from EV shuttles to late-night cafes in one spot.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <h2 class="section-title">Everything you need off-campus</h2>
+        <p class="section-subtitle">Designed for the student lifestyle. Check it before you leave the hostel.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚗</div>
+                <h3>Ride Sharing</h3>
+                <p>Split cabs to the airport or station. Save money, travel safe.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Quick Match</h3>
+                <p>Going out right now? Instantly find others heading the same way.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>Verified Drivers</h3>
+                <p>Trusted local autos with predefined student fares.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Nearby Essentials</h3>
+                <p>Find pharmacies, stationary shops, and mobile repairs fast.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🍕</div>
+                <h3>Hangout Spots</h3>
+                <p>Discover where students actually go for cheap food and good vibes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚌</div>
+                <h3>Campus Transit</h3>
+                <p>Live schedules for internal buses and free EV shuttles.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Available Rides Section (with Add Ride Button) -->
+    <section id="rides" class="section rides-section">
+        <h2 class="section-title">Available Rides</h2>
+        <p class="section-subtitle">Find a ride or share yours.</p>
+        
+        <!-- ADD RIDE BUTTON -->
+        <div class="add-ride-container">
+            <button id="showRideFormBtn" class="add-ride-btn">+ Post a New Ride</button>
+            
+            <div id="rideForm" class="ride-form" style="display: none;">
+                <h3>Post Your Ride</h3>
+                <input type="text" id="riderName" placeholder="Your Name" class="form-input">
+                <input type="text" id="fromLocation" placeholder="From (e.g. Main Gate)" class="form-input">
+                <input type="text" id="toLocation" placeholder="To (e.g. Railway Station)" class="form-input">
+                <input type="time" id="departureTime" class="form-input">
+                <input type="number" id="seatsLeft" placeholder="Seats Available" class="form-input">
+                <button id="saveRideBtn" class="save-ride-btn">Save Ride</button>
+            </div>
+        </div>
+
+        <!-- Rides List -->
+        <div id="ridesList" class="rides-list">
+            <p style="text-align:center;">Loading rides...</p>
+        </div>
+    </section>
+
+    <!-- Quick Match Section -->
+    <section id="quickmatch" class="section quickmatch-section">
+        <h2 class="section-title">Quick Match</h2>
+        <p class="section-subtitle">Students leaving in the next 15 minutes.</p>
+        
+        <div class="quickmatch-list">
+            <div class="quickmatch-card">
+                <div class="quickmatch-initial">D</div>
+                <div class="quickmatch-details">
+                    <h3>Dheeraj Garg</h3>
+                    <p>Main gate → Railway station</p>
+                    <p class="time-badge">🕐 12:43 AM (Soon)</p>
+                    <p>💺 4 seats left</p>
+                </div>
+                <button class="join-instant-btn">Join Instantly</button>
+            </div>
+            
+            <div class="quickmatch-card">
+                <div class="quickmatch-initial">Y</div>
+                <div class="quickmatch-details">
+                    <h3>Yagyanka Pandeya</h3>
+                    <p>Jalandhar cant → N1j campus</p>
+                    <p class="time-badge">🕐 9:01 PM (Soon)</p>
+                    <p>💺 3 seats left</p>
+                </div>
+                <button class="join-instant-btn">Join Instantly</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bus Routes Section -->
+    <section id="buses" class="section buses-section">
+        <h2 class="section-title">Campus Bus Routes</h2>
+        <p class="section-subtitle">Official college buses — free for all students.</p>
+        <p class="free-notice">✨ All campus bus routes are completely free for college students. Just show your ID card.</p>
+        
+        <div class="bus-routes">
+            <div class="bus-card">
+                <h3>Main Campus Loop</h3>
+                <p class="route-time">🕐 06:00 AM - 10:30 PM | Every 15 mins</p>
+                <p class="route-free">✅ FREE</p>
+                <div class="bus-stops">
+                    <strong>Stops:</strong> Main Gate → Admin Block → Library → Hostel Zone A → Sports Complex → Canteen → Main Gate
+                </div>
+            </div>
+            
+            <div class="bus-card">
+                <h3>Hostel to Academic Block</h3>
+                <p class="route-time">🕐 07:00 AM - 09:00 PM | Every 20 mins</p>
+                <p class="route-free">✅ FREE</p>
+                <div class="bus-stops">
+                    <strong>Stops:</strong> Hostel A → Hostel B → Hostel C → Academic Block 1 → Academic Block 2 → Lab Complex
+                </div>
+            </div>
+            
+            <div class="bus-card">
+                <h3>Campus to Medical Centre</h3>
+                <p class="route-time">🕐 07:30 AM - 08:30 PM | Every 30 mins</p>
+                <p class="route-free">✅ FREE</p>
+                <div class="bus-stops">
+                    <strong>Stops:</strong> Main Gate → Admin Block → Sports Ground → Medical Centre
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Verified Drivers Section -->
+    <section id="drivers" class="section drivers-section">
+        <h2 class="section-title">Verified Auto Drivers</h2>
+        <p class="section-subtitle">Trusted campus drivers with fixed student fares. No haggling — split the cost when sharing!</p>
+        
+        <div class="fare-info">
+            <span class="fare-badge">1 person = Base fare</span>
+            <span class="fare-badge">2 sharing = ~35% cheaper per head</span>
+            <span class="fare-badge">3 sharing = ~50% cheaper per head</span>
+        </div>
+        
+        <div class="drivers-list">
+            <div class="driver-card">
+                <h3>Suresh Kumar</h3>
+                <p class="driver-phone">📞 +91 98765 43210</p>
+                <table class="fare-table">
+                    <tr><th>Route</th><th>1</th><th>2</th><th>3</th></tr>
+                    <tr><td>Campus → Railway Station</td><td>₹150</td><td>₹98</td><td>₹75</td></tr>
+                    <tr><td>Campus → Airport</td><td>₹400</td><td>₹260</td><td>₹200</td></tr>
+                    <tr><td>Campus → City Bus Stand</td><td>₹80</td><td>₹52</td><td>₹40</td></tr>
+                </table>
+            </div>
+            
+            <div class="driver-card">
+                <h3>Ramesh Singh</h3>
+                <p class="driver-phone">📞 +91 98765 43211</p>
+                <table class="fare-table">
+                    <tr><th>Route</th><th>1</th><th>2</th><th>3</th></tr>
+                    <tr><td>Campus → Shopping Mall</td><td>₹100</td><td>₹65</td><td>₹50</td></tr>
+                    <tr><td>Campus → Bus Stand</td><td>₹80</td><td>₹52</td><td>₹40</td></tr>
+                    <tr><td>Campus → Hospital</td><td>₹120</td><td>₹76</td><td>₹60</td></tr>
+                </table>
+            </div>
+            
+            <div class="driver-card">
+                <h3>Murugan Raj</h3>
+                <p class="driver-phone">📞 +91 98765 43212</p>
+                <table class="fare-table">
+                    <tr><th>Route</th><th>1</th><th>2</th><th>3</th></tr>
+                    <tr><td>Campus → Railway Station</td><td>₹140</td><td>₹91</td><td>₹70</td></tr>
+                    <tr><td>Campus → Town Center</td><td>₹90</td><td>₹59</td><td>₹45</td></tr>
+                    <tr><td>Campus → Medical College</td><td>₹110</td><td>₹72</td><td>₹55</td></tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 SaathRide. All rights reserved.</p>
+    </footer>
+
+    <!-- Supabase Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(
+            'https://wccuczxdvmyczvqlxzwr.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndjY3Vjenhkdm15Y3p2cWx4endyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNjUzNDIsImV4cCI6MjA5MTg0MTM0Mn0.IYhS9FnVEL8MQjFeLtaISMs9dxGhnU5T9tPrI6cpCeU'
+        );
+
+        // ========== DATABASE FUNCTIONS ==========
+        
+        async function saveRideToDB(riderName, fromLocation, toLocation, departureTime, seatsLeft) {
+            const { data, error } = await supabase
+                .from('rides')
+                .insert([{
+                    rider_name: riderName,
+                    from_location: fromLocation,
+                    to_location: toLocation,
+                    departure_time: departureTime,
+                    seats_left: seatsLeft,
+                    created_at: new Date()
+                }]);
+            
+            if (error) {
+                console.error('Error saving ride:', error);
+                alert('Failed to save ride: ' + error.message);
+                return false;
+            } else {
+                console.log('Ride saved:', data);
+                alert('Ride posted successfully!');
+                loadRidesFromDB();
+                return true;
+            }
+        }
+
+        async function loadRidesFromDB() {
+            const { data, error } = await supabase
+                .from('rides')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error loading rides:', error);
+                displayRidesOnPage([]);
+                return [];
+            }
+            
+            console.log('Loaded rides:', data);
+            displayRidesOnPage(data);
+            return data;
+        }
+
+        function displayRidesOnPage(rides) {
+            const ridesContainer = document.getElementById('ridesList');
+            if (!ridesContainer) return;
+            
+            if (!rides || rides.length === 0) {
+                ridesContainer.innerHTML = '<p style="text-align:center;">No rides available. Be the first to post one!</p>';
+                return;
+            }
+            
+            ridesContainer.innerHTML = rides.map(ride => `
+                <div class="ride-card">
+                    <div class="ride-initial">${escapeHtml(ride.rider_name?.charAt(0) || '?')}</div>
+                    <div class="ride-details">
+                        <h3>${escapeHtml(ride.rider_name)}</h3>
+                        <p class="ride-route">${escapeHtml(ride.from_location)} → ${escapeHtml(ride.to_location)}</p>
+                        <p class="ride-time">🕐 ${escapeHtml(ride.departure_time) || 'Time TBA'}</p>
+                        <p class="ride-seats">💺 ${ride.seats_left} seats left</p>
+                    </div>
+                    <button class="join-btn" onclick="alert('Contact ${escapeHtml(ride.rider_name)} to join this ride!')">Join Ride</button>
+                </div>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // Setup event listeners when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRidesFromDB();
+            
+            const saveBtn = document.getElementById('saveRideBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function() {
+                    const riderName = document.getElementById('riderName')?.value;
+                    const fromLocation = document.getElementById('fromLocation')?.value;
+                    const toLocation = document.getElementById('toLocation')?.value;
+                    const departureTime = document.getElementById('departureTime')?.value;
+                    const seatsLeft = document.getElementById('seatsLeft')?.value;
+                    
+                    if (!riderName || !fromLocation || !toLocation || !departureTime || !seatsLeft) {
+                        alert('Please fill all fields');
+                        return;
+                    }
+                    
+                    saveRideToDB(riderName, fromLocation, toLocation, departureTime, parseInt(seatsLeft));
+                    
+                    document.getElementById('riderName').value = '';
+                    document.getElementById('fromLocation').value = '';
+                    document.getElementById('toLocation').value = '';
+                    document.getElementById('departureTime').value = '';
+                    document.getElementById('seatsLeft').value = '';
+                    document.getElementById('rideForm').style.display = 'none';
+                });
+            }
+            
+            const showBtn = document.getElementById('showRideFormBtn');
+            if (showBtn) {
+                showBtn.addEventListener('click', function() {
+                    const form = document.getElementById('rideForm');
+                    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

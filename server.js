@@ -15,14 +15,16 @@ mongoose.connect("mongodb://127.0.0.1:27017/campusconnect");
 const User = mongoose.model("User", {
   username: String,
   email: String,
-  password: String
+  password: String,
+  lat: Number,
+  lon: Number
 });
 
 const Poll = mongoose.model("Poll", {
   question: String,
   options: [{ text: String, votes: Number }],
   createdBy: String,
-  userId: String   // ✅ ADD THIS
+  userId: String
 });
 
 const SECRET = "secret123";
@@ -55,21 +57,20 @@ app.post("/create-poll", async (req, res) => {
 
   try {
     const token = req.headers.authorization;
+    const decoded = jwt.verify(token, SECRET);
 
-    const decoded = jwt.verify(token, "secret123");
     const user = await User.findById(decoded.id);
 
     const poll = await Poll.create({
       question,
       options: options.map(o => ({ text: o, votes: 0 })),
       createdBy: user.username,
-      userId: user._id   // ✅ SAVE USER ID
+      userId: user._id
     });
 
     res.json(poll);
 
-  } catch (err) {
-    console.log("ERROR:", err); // optional debug
+  } catch {
     res.status(401).send("Unauthorized");
   }
 });
@@ -96,6 +97,7 @@ app.get("/profile", async (req, res) => {
   try {
     const token = req.headers.authorization;
     const decoded = jwt.verify(token, SECRET);
+
     const user = await User.findById(decoded.id);
 
     res.json({
@@ -108,11 +110,39 @@ app.get("/profile", async (req, res) => {
   }
 });
 
+// LOCATION (✅ OUTSIDE)
+app.post("/location", async (req, res) => {
+  const { lat, lon } = req.body;
+
+  try {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, SECRET);
+
+    const user = await User.findById(decoded.id);
+
+    user.lat = lat;
+    user.lon = lon;
+
+    await user.save();
+
+    res.json({ message: "Location saved" });
+
+  } catch {
+    res.status(401).send("Unauthorized");
+  }
+});
+
+// GET ALL USERS LOCATION (✅ OUTSIDE)
+app.get("/all-locations", async (req, res) => {
+  const users = await User.find({}, "username lat lon _id");
+  res.json(users);
+});
+
 // DELETE POLL
 app.delete("/delete-poll/:id", async (req, res) => {
   try {
     const token = req.headers.authorization;
-    const decoded = jwt.verify(token, "secret123");
+    const decoded = jwt.verify(token, SECRET);
 
     const poll = await Poll.findById(req.params.id);
 
@@ -120,7 +150,7 @@ app.delete("/delete-poll/:id", async (req, res) => {
       return res.status(404).json({ message: "Poll not found" });
     }
 
-    // ✅ CHECK OWNER
+    // ONLY CREATOR CAN DELETE
     if (poll.userId != decoded.id) {
       return res.status(403).json({ message: "Not allowed" });
     }
@@ -129,7 +159,7 @@ app.delete("/delete-poll/:id", async (req, res) => {
 
     res.json({ message: "Poll deleted" });
 
-  } catch (err) {
+  } catch {
     res.status(401).json({ message: "Unauthorized" });
   }
 });
