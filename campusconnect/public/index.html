@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaathRide - Campus Travel Made Easy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">🚗 SaathRide</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#rides">Rides</a>
+            <a href="#quickmatch">Quick Match</a>
+            <a href="#buses">Buses</a>
+            <a href="#drivers">Drivers</a>
+            <a href="#" class="btn-primary">Join with College Email</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>The smart mobility network for campus</h1>
+        <p>Travel Smarter. Together.</p>
+        <div class="hero-buttons">
+            <a href="#" class="hero-btn hero-btn-primary">Join with College Email</a>
+            <a href="#" class="hero-btn hero-btn-secondary">How it works</a>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="section">
+        <div class="grid-2col">
+            <div class="card">
+                <h3>❌ Campus travel is broken.</h3>
+                <ul>
+                    <li><strong>Unpredictable Auto Fares</strong><br>Every trip to the station is a negotiation battle.</li>
+                    <li><strong>Missed Connections</strong><br>Friends are leaving at the same time, but in different cabins.</li>
+                    <li><strong>Scattered Information</strong><br>Bus schedules on WhatsApp groups, hangout spots on word-of-mouth.</li>
+                </ul>
+            </div>
+            <div class="card solution-card">
+                <h3>✅ One verified ecosystem.</h3>
+                <ul>
+                    <li><strong>Fixed Fare Charts</strong><br>Verified drivers with agreed-upon rates. No more haggling.</li>
+                    <li><strong>Smart Ride Matching</strong><br>Find students leaving in the next 15 mins to the same place.</li>
+                    <li><strong>Campus Hub</strong><br>Everything from EV shuttles to late-night cafes in one spot.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <h2 class="section-title">Everything you need off-campus</h2>
+        <p class="section-subtitle">Designed for the student lifestyle. Check it before you leave the hostel.</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚗</div>
+                <h3>Ride Sharing</h3>
+                <p>Split cabs to the airport or station. Save money, travel safe.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Quick Match</h3>
+                <p>Going out right now? Instantly find others heading the same way.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <h3>Verified Drivers</h3>
+                <p>Trusted local autos with predefined student fares.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Nearby Essentials</h3>
+                <p>Find pharmacies, stationary shops, and mobile repairs fast.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🍕</div>
+                <h3>Hangout Spots</h3>
+                <p>Discover where students actually go for cheap food and good vibes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚌</div>
+                <h3>Campus Transit</h3>
+                <p>Live schedules for internal buses and free EV shuttles.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Available Rides Section (with Add Ride Button) -->
+    <section id="rides" class="section rides-section">
+        <h2 class="section-title">Available Rides</h2>
+        <p class="section-subtitle">Find a ride or share yours.</p>
+        
+        <!-- ADD RIDE BUTTON -->
+        <div class="add-ride-container">
+            <button id="showRideFormBtn" class="add-ride-btn">+ Post a New Ride</button>
+            
+            <div id="rideForm" class="ride-form" style="display: none;">
+                <h3>Post Your Ride</h3>
+                <input type="text" id="riderName" placeholder="Your Name" class="form-input">
+                <input type="text" id="fromLocation" placeholder="From (e.g. Main Gate)" class="form-input">
+                <input type="text" id="toLocation" placeholder="To (e.g. Railway Station)" class="form-input">
+                <input type="time" id="departureTime" class="form-input">
+                <input type="number" id="seatsLeft" placeholder="Seats Available" class="form-input">
+                <button id="saveRideBtn" class="save-ride-btn">Save Ride</button>
+            </div>
+        </div>
+
+        <!-- Rides List -->
+        <div id="ridesList" class="rides-list">
+            <!-- Sample Rides -->
+            <div class="ride-card">
+                <div class="ride-initial">D</div>
+                <div class="ride-details">
+                    <h3>Dheeraj Garg</h3>
+                    <p class="ride-route">Main gate → Railway station</p>
+                    <p class="ride-time">🕐 12:43 AM, Apr 4</p>
+                    <p class="ride-seats">💺 4 / 5 seats left</p>
+                </div>
+                <button class="join-btn">Join Ride</button>
+            </div>
+            
+            <div class="ride-card">
+                <div class="ride-initial">Y</div>
+                <div class="ride-details">
+                    <h3>Yagyanika Pandeya</h3>
+                    <p class="ride-route">Jalandhar cant → Niti campus</p>
+                    <p class="ride-time">🕐 9:01 PM, Apr 6</p>
+                    <p class="ride-seats">💺 3 / 4 seats left</p>
+                </div>
+                <button class="join-btn">Join Ride</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Match Section -->
+    <section id="quickmatch" class="section quickmatch-section">
+        <h2 class="section-title">Quick Match</h2>
+        <p class="section-subtitle">Students leaving in the next 15 minutes.</p>
+        
+        <div class="quickmatch-list">
+            <div class="quickmatch-card">
+                <div class="quickmatch-initial">D</div>
+                <div class="quickmatch-details">
+                    <h3>Dheeraj Garg</h3>
+                    <p>Main gate → Railway station</p>
+                    <p class="time-badge">🕐 12:43 AM (Soon)</p>
+                    <p>💺 4 seats left</p>
+                </div>
+                <button class="join-instant-btn">Join Instantly</button>
+            </div>
+            
+            <div class="quickmatch-card">
+                <div class="quickmatch-initial">Y</div>
+                <div class="quickmatch-details">
+                    <h3>Yagyanka Pandeya</h3>
+                    <p>Jalandhar cant → N1j campus</p>
+                    <p class="time-badge">🕐 9:01 PM (Soon)</p>
+                    <p>💺 3 seats left</p>
+                </div>
+                <button class="join-instant-btn">Join Instantly</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bus Routes Section -->
+    <section id="buses" class="section buses-section">
+        <h2 class="section-title">Campus Bus Routes</h2>
+        <p class="section-subtitle">Official college buses — free for all students.</p>
+        <p class="free-notice">✨ All campus bus routes are completely free for college students. Just show your ID card.</p>
+        
+        <div class="bus-routes">
+            <div class="bus-card">
+                <h3>Main Campus Loop</h3>
+                <p class="route-time">🕐 06:00 AM - 10:30 PM | Every 15 mins</p>
+                <p class="route-free">✅ FREE</p>
+                <div class="bus-stops">
+                    <strong>Stops:</strong> Main Gate → Admin Block → Library → Hostel Zone A → Sports Complex → Canteen → Main Gate
+                </div>
+            </div>
+            
+            <div class="bus-card">
+                <h3>Hostel to Academic Block</h3>
+                <p class="route-time">🕐 07:00 AM - 09:00 PM | Every 20 mins</p>
+                <p class="route-free">✅ FREE</p>
+                <div class="bus-stops">
+                    <strong>Stops:</strong> Hostel A → Hostel B → Hostel C → Academic Block 1 → Academic Block 2 → Lab Complex
+                </div>
+            </div>
+            
+            <div class="bus-card">
+                <h3>Campus to Medical Centre</h3>
+                <p class="route-time">🕐 07:30 AM - 08:30 PM | Every 30 mins</p>
+                <p class="route-free">✅ FREE</p>
+                <div class="bus-stops">
+                    <strong>Stops:</strong> Main Gate → Admin Block → Sports Ground → Medical Centre
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Verified Drivers Section -->
+    <section id="drivers" class="section drivers-section">
+        <h2 class="section-title">Verified Auto Drivers</h2>
+        <p class="section-subtitle">Trusted campus drivers with fixed student fares. No haggling — split the cost when sharing!</p>
+        
+        <div class="fare-info">
+            <span class="fare-badge">1 person = Base fare</span>
+            <span class="fare-badge">2 sharing = ~35% cheaper per head</span>
+            <span class="fare-badge">3 sharing = ~50% cheaper per head</span>
+        </div>
+        
+        <div class="drivers-list">
+            <div class="driver-card">
+                <h3>Suresh Kumar</h3>
+                <p class="driver-phone">📞 +91 98765 43210</p>
+                <table class="fare-table">
+                    <tr><th>Route</th><th>1</th><th>2</th><th>3</th></tr>
+                    <tr><td>Campus → Railway Station</td><td>₹150</td><td>₹98</td><td>₹75</td></tr>
+                    <tr><td>Campus → Airport</td><td>₹400</td><td>₹260</td><td>₹200</td></tr>
+                    <tr><td>Campus → City Bus Stand</td><td>₹80</td><td>₹52</td><td>₹40</td></tr>
+                </table>
+            </div>
+            
+            <div class="driver-card">
+                <h3>Ramesh Singh</h3>
+                <p class="driver-phone">📞 +91 98765 43211</p>
+                <table class="fare-table">
+                    <tr><th>Route</th><th>1</th><th>2</th><th>3</th></tr>
+                    <tr><td>Campus → Shopping Mall</td><td>₹100</td><td>₹65</td><td>₹50</td></tr>
+                    <tr><td>Campus → Bus Stand</td><td>₹80</td><td>₹52</td><td>₹40</td></tr>
+                    <tr><td>Campus → Hospital</td><td>₹120</td><td>₹76</td><td>₹60</td></tr>
+                </table>
+            </div>
+            
+            <div class="driver-card">
+                <h3>Murugan Raj</h3>
+                <p class="driver-phone">📞 +91 98765 43212</p>
+                <table class="fare-table">
+                    <tr><th>Route</th><th>1</th><th>2</th><th>3</th></tr>
+                    <tr><td>Campus → Railway Station</td><td>₹140</td><td>₹91</td><td>₹70</td></tr>
+                    <tr><td>Campus → Town Center</td><td>₹90</td><td>₹59</td><td>₹45</td></tr>
+                    <tr><td>Campus → Medical College</td><td>₹110</td><td>₹72</td><td>₹55</td></tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 SaathRide. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
